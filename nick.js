@@ -203,8 +203,8 @@ function Enemy(){
   this.image = new Image();
   this.image.src = 'img/orangeEnemyShip.png';
   this.health = 1;
-  this.x = x;
-  this.y = y;
+  this.x = 100;
+  this.y = 100;
   this.height = 110;
   this.width = 120;
   this.speed = 2;
@@ -220,16 +220,12 @@ Enemy.prototype.rightDown = function(){
   that = this;
   var x =  setInterval(function(){
     self.draw();
-    // console.log(self);
     self.x += self.speed;
-    // console.log(self.x);
       if(self.x > 1300){
         currentP = self.y;
         var y =  setInterval(function(){
         that.draw();
         newP = currentP + 100;
-        // console.log(currentP);
-        // console.log(newP);
         that.y += that.speed;
           if(that.y >= newP){
             clearInterval(y);
@@ -247,14 +243,11 @@ Enemy.prototype.leftDown = function(){
   var x =  setInterval(function(){
     self.draw();
     self.x -= self.speed;
-    // console.log(self.x);
       if(self.x < 50){
         currentP = self.y;
         var y =  setInterval(function(){
         that.draw();
         newP = currentP + 100;
-        // console.log(currentP);
-        // console.log(newP);
         that.y += that.speed;
           if(that.y >= newP){
             clearInterval(y);
@@ -294,8 +287,6 @@ Enemy.prototype.spawn = function(){
   console.log(this);
     spawnedEnemy = game.stockedEnemies.splice(0,1)[0];
     game.spawnedEnemies.push(spawnedEnemy);
-    this.x = 100;
-    this.y = 100;
     this.fullEnemyRoute();
   // }
 };
@@ -338,7 +329,7 @@ function MainLoop(){
 }
 
 function CheckSpawner(){
-  game.spawner();
+  game.rightDown();
   setTimeout(CheckSpawner, 1000);
 }
 
