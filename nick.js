@@ -9,6 +9,7 @@ var reloadingMissile;
 var timeOutSpeed = 6600;
 
 
+
 // Game Constructor////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Game(){
 
@@ -215,9 +216,8 @@ function Enemy(){
 }
 
 
-Enemy.prototype.rightDown = function(){
-  self = this;
-  that = this;
+Enemy.prototype.rightDown = function(theEnemyIndex){
+  var self = game.spawnedEnemies[theEnemyIndex];
   var x =  setInterval(function(){
     self.draw();
     self.x += self.speed;
@@ -225,24 +225,23 @@ Enemy.prototype.rightDown = function(){
       if(self.x > 1300){
         currentP = self.y;
         var y =  setInterval(function(){
-        that.draw();
+        self.draw();
         newP = currentP + 100;
-        console.log(currentP);
-        console.log(newP);
-        that.y += that.speed;
-          if(that.y >= newP){
+        self.y += self.speed;
+          if(self.y >= newP){
+            console.log("CLEARINTERVAL!!!!!");
             clearInterval(y);
             }
           },10);
+          console.log("CLEARINTERVAL!!!!!");
         clearInterval(x);
       }
     },10);
   return "default return value";
 };
 
-Enemy.prototype.leftDown = function(){
-  self = this;
-  that = this;
+Enemy.prototype.leftDown = function(theEnemyIndex){
+  var self = game.spawnedEnemies[theEnemyIndex];
   var x =  setInterval(function(){
     self.draw();
     self.x -= self.speed;
@@ -250,11 +249,11 @@ Enemy.prototype.leftDown = function(){
       if(self.x < 50){
         currentP = self.y;
         var y =  setInterval(function(){
-        that.draw();
+        self.draw();
         newP = currentP + 100;
         // console.log(currentP);
         // console.log(newP);
-        that.y += that.speed;
+        self.y += self.speed;
           if(that.y >= newP){
             clearInterval(y);
             }
@@ -266,27 +265,28 @@ Enemy.prototype.leftDown = function(){
 };
 
 
-Enemy.prototype.enemyRoute = function(){
-  this.rightDown();
+Enemy.prototype.enemyRoute = function(theEnemyIndex){
+  this.rightDown(theEnemyIndex);
   self = this;
   setTimeout(function(){
-     self.leftDown();
+     self.leftDown(theEnemyIndex);
    }, timeOutSpeed);
 };
 
 
-Enemy.prototype.fullEnemyRoute = function(){
-  this.enemyRoute();
+Enemy.prototype.fullEnemyRoute = function(theEnemyIndex){
+  this.enemyRoute(theEnemyIndex);
   self = this;
   setTimeout(function(){
-    self.enemyRoute();
+    self.enemyRoute(theEnemyIndex);
     setTimeout(function(){
-      self.enemyRoute();
+      self.enemyRoute(theEnemyIndex);
     }, timeOutSpeed * 2);
   }, timeOutSpeed * 2);
 };
 
 Enemy.prototype.spawn = function(){
+  console.log("ENEMY SPAWNED!!!!!!!");
   // this.alive =true;
   // // this.draw();
   // if(this.alive === true){
@@ -294,7 +294,7 @@ Enemy.prototype.spawn = function(){
     game.spawnedEnemies.push(spawnedEnemy);
     this.x = 100;
     this.y = 100;
-    this.fullEnemyRoute();
+    this.fullEnemyRoute(game.spawnedEnemies.length - 1);
   // }
 };
 
@@ -337,6 +337,7 @@ function MainLoop(){
 
 function CheckSpawner(){
   game.spawner();
+
   setTimeout(CheckSpawner, 1000);
 }
 
